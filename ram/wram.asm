@@ -2704,7 +2704,6 @@ wTempPP::
 wNextBoxOrPartyIndex::
 wChosenCableClubRoom::
 wBreedingCompatibility::
-wMoveGrammar::
 wApplyStatLevelMultipliersToEnemy::
 wUsePPUp::
 wd265:: ; mobile
