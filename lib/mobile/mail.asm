@@ -1,9 +1,8 @@
 ; A library included as part of the Mobile Adapter GB SDK.
 
-setcharmap ascii
-
-
 SECTION "Mobile Adapter SDK Mail", ROMX
+	pushc
+	setcharmap ascii
 
 String_114000:
 	db "---", 0
@@ -61,6 +60,8 @@ String_114160:
 	db "--", 0
 String_114163:
 	db ".", 0
+
+	popc
 
 Jumptable_114165:
 	dw Stubbed_Function114268
@@ -495,17 +496,17 @@ Function1143f3:
 	jp z, .asm_1144c2
 	inc e
 	call z, Function1144c8
-	cp "\r"
+	cp $d
 	jr nz, .asm_11442b
 	ld a, [de]
 	inc e
 	call z, Function1144c8
-	cp "\n"
+	cp $a
 	jr nz, .asm_11442b
 	ld a, [de]
-	cp "."
+	cp $2e
 	jr z, .asm_1144ae
-	cp "\r"
+	cp $d
 	jr z, .asm_1144b8
 
 .asm_11444a
@@ -516,9 +517,9 @@ Function1143f3:
 	jr z, .asm_1144c2
 	inc e
 	call z, Function1144c8
-	cp "a"
+	cp $61
 	jr c, .asm_114462
-	cp "z" + 1
+	cp $7b
 	jr nc, .asm_114462
 	sub $20
 
@@ -542,13 +543,16 @@ Function1143f3:
 	jr .asm_11446e
 
 .asm_114476
-	ld a, " "
+	ld a, $20
 	cp b
 	jr z, .asm_114481
-	ld a, "\n"
+	ld a, $a
 	cp b
 	jr z, .asm_114481
 	dec de
+
+	pushc
+	setcharmap ascii
 
 .asm_114481
 	ld h, d
@@ -5158,3 +5162,4 @@ Function115d80:
 	ld d, $a0
 	ld e, $0
 	ret
+popc

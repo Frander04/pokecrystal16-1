@@ -394,6 +394,7 @@ SetMinTwoStepWildEncounterCooldown:
 
 Dummy_CheckScriptFlags2Bit5:
 	call CheckBit5_ScriptFlags2
+	ret z
 	ret
 
 RunSceneScript:

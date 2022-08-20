@@ -980,7 +980,6 @@ FastBallMultiplier:
 	ld a, BANK(FleeMons)
 	call GetFarByte
 	ld c, a
-	inc hl
 	ld a, BANK(FleeMons)
 	call GetFarByte
 	ld b, a

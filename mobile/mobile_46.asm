@@ -3951,19 +3951,16 @@ BattleTower_UbersCheck:
 	ld a, [wPartyCount]
 .loop
 	push af
-	push bc
-	push de
-	push hl
 	ld a, [de]
-	call GetPokemonIndexFromID
-	ld b, h
-	ld c, l
+	push de
+	push bc
+	push hl
 	ld hl, .ubers
 	ld de, 2
 	call IsInWordArray
 	pop hl
-	pop de
 	pop bc
+	pop de
 	jr nc, .next
 .uber
 	ld a, [hl]
@@ -5659,7 +5656,7 @@ Function11ad1b:
 	ld a, BANK(LoadMenuMonIcon)
 	ld e, MONICON_MOBILE2
 	rst FarCall
-	ld hl, wPokedexOrder
+	ld hl, $c6d0
 	ld bc, $0115
 	xor a
 	call ByteFill
@@ -5670,7 +5667,7 @@ Function11ad1b:
 	ld [wcf66], a
 	ld [wcd30], a
 	ld a, DEXMODE_ABC
-	ld [wCurDexMode], a
+	ld [$c7d4], a
 	farcall Pokedex_OrderMonsByMode
 	ret
 
@@ -6147,7 +6144,7 @@ Function11b099:
 	ld a, [wc7d0]
 	ld e, a
 	ld d, 0
-	ld hl, wPokedexOrder
+	ld hl, wc6d0
 	add hl, de
 	ld e, l
 	ld d, h

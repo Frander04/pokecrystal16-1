@@ -190,6 +190,8 @@ SaveTheGame_yesorno:
 	ld a, [wMenuCursorY]
 	dec a
 	call CloseWindow
+	push af
+	pop af
 	and a
 	ret
 

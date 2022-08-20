@@ -25,9 +25,9 @@ DecorationAttributes:
 	decoration DECO_PLANT,   JUMBOPLANT,      SET_UP_PLANT,      EVENT_DECO_PLANT_3,                 $22
 	decoration DECO_PLANT,   PUT_IT_AWAY,     PUT_AWAY_POSTER,   EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1, 0
 	decoration DECO_PLANT,   TOWN_MAP_POSTER, SET_UP_POSTER,     EVENT_DECO_POSTER_1,                $1f
-	decoration DECO_POSTER,  4,               SET_UP_POSTER,     EVENT_DECO_POSTER_1,                $23
-	decoration DECO_POSTER,  5,               SET_UP_POSTER,     EVENT_DECO_POSTER_2,                $24
-	decoration DECO_POSTER,  6,               SET_UP_POSTER,     EVENT_DECO_POSTER_3,                $25
+	decoration DECO_POSTER,  4,               SET_UP_POSTER,     $02b0,                $23
+	decoration DECO_POSTER,  5,               SET_UP_POSTER,     $02b1,                $24
+	decoration DECO_POSTER,  6,               SET_UP_POSTER,     $02b2,                $25
 	decoration DECO_PLANT,   PUT_IT_AWAY,     PUT_AWAY_CONSOLE,  EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1, 0
 	decoration DECO_PLANT,   FAMICOM,         SET_UP_CONSOLE,    EVENT_DECO_FAMICOM,                 SPRITE_FAMICOM
 	decoration DECO_PLANT,   SUPER_NES,       SET_UP_CONSOLE,    EVENT_DECO_SNES,                    SPRITE_SNES

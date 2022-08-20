@@ -1521,7 +1521,6 @@ GetBuenasPassword:
 	ld l, a
 	call GetPokemonIDFromIndex
 	call GetPokemonName
-	ld [wNamedObjectIndex], a
 	ret
 
 .Item:
@@ -1543,7 +1542,6 @@ GetBuenasPassword:
 	ld l, a
 	call GetMoveIDFromIndex
 	call GetMoveName
-	ld [wNamedObjectIndex], a
 	ret
 
 .RawString:

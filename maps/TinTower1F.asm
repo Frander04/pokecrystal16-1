@@ -18,7 +18,7 @@ TinTower1F_MapScripts:
 	def_callbacks
 	callback MAPCALLBACK_OBJECTS, TinTower1FNPCsCallback
 	callback MAPCALLBACK_TILES, TinTower1FStairsCallback
-	callback MAPCALLBACK_NEWMAP, TinTower1FLoadReservedIDsCallback
+	callback MAPCALLBACK_NEWMAP, TinTower1FNPCsCallback.LoadReservedIDs
 
 TinTower1FSuicuneBattleScene:
 	sdefer TinTower1FSuicuneBattleScript
@@ -26,12 +26,6 @@ TinTower1FSuicuneBattleScene:
 
 TinTower1FNoopScene:
 	end
-
-TinTower1FLoadReservedIDsCallback:
-	loadmonindex 1, RAIKOU
-	loadmonindex 2, ENTEI
-	loadmonindex 3, SUICUNE
-	endcallback
 
 TinTower1FNPCsCallback:
 	checkevent EVENT_GOT_RAINBOW_WING
@@ -47,6 +41,12 @@ TinTower1FNPCsCallback:
 	iffalse .Done
 	appear TINTOWER1F_EUSINE
 .Done:
+	endcallback
+
+.LoadReservedIDs:
+	loadmonindex 1, RAIKOU
+	loadmonindex 2, ENTEI
+	loadmonindex 3, SUICUNE
 	endcallback
 
 .FaceBeasts:

@@ -3360,6 +3360,7 @@ IsThePlayerMonTypesEffectiveAgainstOTMon:
 	add hl, bc
 	ld de, wEnemyMonType
 	ld c, BASE_CATCH_RATE - BASE_TYPES
+	ld a, BANK(BaseData)
 	call FarCopyBytes
 	ld a, [wBattleMonType1]
 	ld [wPlayerMoveStruct + MOVE_TYPE], a
@@ -3594,7 +3595,6 @@ ShowBattleTextEnemySentOut:
 
 ShowSetEnemyMonAndSendOutAnimation:
 	ld a, [wTempEnemyMonSpecies]
-	call SetSeenMon
 	ld [wCurPartySpecies], a
 	ld [wCurSpecies], a
 	call GetBaseData
