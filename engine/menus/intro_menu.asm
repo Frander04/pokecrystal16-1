@@ -321,6 +321,7 @@ InitializeWorld:
 	call ShrinkPlayer
 	farcall SpawnPlayer
 	farcall _InitializeStartDay
+	farcall InitializeEvents
 	ret
 
 LoadOrRegenerateLuckyIDNumber:
@@ -805,9 +806,9 @@ NamePlayer:
 	ret
 
 .Chris:
-	db "CHRIS@@@@@@"
+	db "BRENDAN@@@@"
 .Kris:
-	db "KRIS@@@@@@@"
+	db "MAY@@@@@@@@"
 
 GSShowPlayerNamingChoices: ; unreferenced
 	call LoadMenuHeader

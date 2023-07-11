@@ -198,7 +198,8 @@ TrainerBugCatcherDon:
 	trainer BUG_CATCHER, DON, EVENT_BEAT_BUG_CATCHER_DON, BugCatcherDonSeenText, BugCatcherDonBeatenText, 0, .Script
 
 .Script:
-	endifjustbattled
+    loadvar VAR_BATTLETYPE, BATTLETYPE_SET
+	startbattle
 	opentext
 	writetext BugCatcherDonAfterText
 	waitbutton

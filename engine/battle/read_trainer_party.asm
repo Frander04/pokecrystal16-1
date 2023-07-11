@@ -107,6 +107,41 @@ ReadTrainerPartyPieces:
 	inc hl ;because hl was pushed before the last call to GetNextTrainerDataByte
 
 	ld a, [wOtherTrainerType]
+	bit TRAINERTYPE_NICKNAME_F, a
+	jr z, .no_nickname
+
+	push de
+	ld de, wStringBuffer2
+.copy_nickname
+	call GetNextTrainerDataByte
+	push hl
+	push af
+	call GetNextTrainerDataByte
+	ld h, a
+	pop af
+	ld l, a
+	pop hl
+	inc hl
+	ld [de], a
+	inc de
+	cp "@"
+	jr nz, .copy_nickname
+
+	push hl
+	ld a, [wOTPartyCount]
+	dec a
+	ld hl, wOTPartyMonNicknames
+	ld bc, MON_NAME_LENGTH
+	call AddNTimes
+	ld d, h
+	ld e, l
+	ld hl, wStringBuffer2
+	ld bc, MON_NAME_LENGTH
+	call CopyBytes
+	pop hl
+	pop de
+.no_nickname
+	ld a, [wOtherTrainerType]
 	and TRAINERTYPE_ITEM
 	jr z, .no_item
 	push hl

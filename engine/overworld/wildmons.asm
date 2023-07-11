@@ -948,6 +948,8 @@ RandomPhoneMon:
 	call GetFarByte
 	inc hl
 	ld c, a
+	bit TRAINERTYPE_NICKNAME_F, c
+	jr nz, .got_mon
 	ld a, 3
 	bit TRAINERTYPE_ITEM_F, c
 	jr z, .no_item

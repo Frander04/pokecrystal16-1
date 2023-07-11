@@ -5,6 +5,7 @@
 ;    * for TRAINERTYPE_MOVES:      db level, species, 4 moves
 ;    * for TRAINERTYPE_ITEM:       db level, species, item
 ;    * for TRAINERTYPE_ITEM_MOVES: db level, species, item, 4 moves
+;    * for TRAINERTYPE_NICKNAME:   db level, species, nickname
 ; - db -1 ; end
 
 SECTION "Enemy Trainer Parties 1", ROMX
@@ -2292,11 +2293,15 @@ SabrinaGroup:
 
 BugCatcherGroup:
 	next_list_item ; BUG_CATCHER (1)
-	db "DON@", TRAINERTYPE_NORMAL
+	db "DON@", TRAINERTYPE_NICKNAME	| TRAINERTYPE_ITEM
 	db 3
 	dw CATERPIE
+	dw "WEBITO@"
+	db BERRY
 	db 3
 	dw CATERPIE
+	dw "@"
+	db BERRY
 	db -1 ; end
 
 	next_list_item ; BUG_CATCHER (2)
