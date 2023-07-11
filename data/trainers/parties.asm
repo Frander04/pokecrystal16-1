@@ -633,9 +633,24 @@ ErikaGroup:
 
 YoungsterGroup:
 	next_list_item ; YOUNGSTER (1)
-	db "JOEY@", TRAINERTYPE_NORMAL
+	db "JOEY@", TRAINERTYPE_VARIABLE
+
+	; No badges
+	db TRAINERTYPE_NORMAL
 	db 4
 	dw RATTATA
+	db $fe ; delimiter
+
+	; One badges
+	db TRAINERTYPE_NORMAL
+	db 10
+	dw RATTATA
+	db $fe ; delimiter
+
+	; Two badges
+	db TRAINERTYPE_NORMAL
+	db 20
+	dw RATICATE
 	db -1 ; end
 
 	next_list_item ; YOUNGSTER (2)
