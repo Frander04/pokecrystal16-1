@@ -732,6 +732,7 @@ wBackupDexListingCursor:: db
 wBackupDexListingPage:: dw
 wDexCurLocation:: db
 wPokedexStatus:: db
+wPokedexShinyToggle:: db ; bit 0: set if displaying shiny palettes
 wPokedexDisplayNumber:: dw
 wDexLastSeenIndex:: db ; index into wPokedexSeen containing the last non-zero value
 wDexLastSeenValue:: db ; value at index
@@ -743,7 +744,7 @@ wPrevDexEntryBackup:: dw
 wPrevDexEntryJumptableIndex:: db
 
 wPokedexNameBuffer:: ds MON_NAME_LENGTH
-	ds 231
+	ds 230
 
 NEXTU
 ; pokegear
