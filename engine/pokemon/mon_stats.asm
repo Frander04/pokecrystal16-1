@@ -142,14 +142,16 @@ GetGender:
 	and a
 	jr z, .PartyMon
 
+	ld hl, wBufferMonDVs
+	cp BUFFERMON
+	jr z, .DVs
+
 ; 1: OTPartyMon
 	ld hl, wOTPartyMon1DVs
 	dec a
 	jr z, .PartyMon
 
 ; 2: sBoxMon
-	ld hl, sBoxMon1DVs
-	ld bc, BOXMON_STRUCT_LENGTH
 	dec a
 	jr z, .sBoxMon
 
@@ -164,18 +166,16 @@ GetGender:
 
 ; Get our place in the party/box.
 
+.sBoxMon:
+	; old box code access; crash
+	di
+	jp @
+
 .PartyMon:
-.sBoxMon
 	ld a, [wCurPartyMon]
 	call AddNTimes
 
 .DVs:
-; sBoxMon data is read directly from SRAM.
-	ld a, [wMonType]
-	cp BOXMON
-	ld a, BANK(sBox)
-	call z, OpenSRAM
-
 ; Attack DV
 	ld a, [hl]
 	cpl
@@ -200,11 +200,6 @@ GetGender:
 	or b
 	swap a
 	ld b, a   ; ~(Atk DV & 1) << 1 | (Def DV & 1) << 2 | ~(Spc DV & 1) << 3
-
-; Close SRAM if we were dealing with a sBoxMon.
-	ld a, [wMonType]
-	cp BOXMON
-	call z, CloseSRAM
 
 ; We need the gender ratio to do anything with this.
 	push bc

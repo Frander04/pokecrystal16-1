@@ -175,12 +175,6 @@ EggStatsInit:
 
 EggStatsJoypad:
 	call StatsScreen_GetJoypad
-	jr nc, .check
-	ld h, 0
-	call StatsScreen_SetJumptableIndex
-	ret
-
-.check
 	bit A_BUTTON_F, a
 	jr nz, .quit
 if DEF(_DEBUG)
@@ -258,7 +252,7 @@ StatsScreenWaitCry:
 
 StatsScreen_CopyToTempMon:
 	ld a, [wMonType]
-	cp TEMPMON
+	cp BUFFERMON
 	jr nz, .not_tempmon
 	ld a, [wBufferMonSpecies]
 	ld [wCurSpecies], a
@@ -284,30 +278,8 @@ StatsScreen_CopyToTempMon:
 
 StatsScreen_GetJoypad:
 	call GetJoypad
-	ld a, [wMonType]
-	cp TEMPMON
-	jr nz, .not_tempmon
-	push hl
-	push de
-	push bc
-	farcall StatsScreenDPad
-	pop bc
-	pop de
-	pop hl
-	ld a, [wMenuJoypad]
-	and D_DOWN | D_UP
-	jr nz, .set_carry
-	ld a, [wMenuJoypad]
-	jr .clear_carry
-
-.not_tempmon
 	ldh a, [hJoyPressed]
-.clear_carry
 	and a
-	ret
-
-.set_carry
-	scf
 	ret
 
 StatsScreen_JoypadAction:
@@ -332,6 +304,8 @@ StatsScreen_JoypadAction:
 
 .d_down
 	ld a, [wMonType]
+	cp BUFFERMON
+	jr z, .next_storage
 	cp BOXMON
 	jr nc, .done
 	and a
@@ -355,6 +329,9 @@ StatsScreen_JoypadAction:
 	jr .load_mon
 
 .d_up
+	ld a, [wMonType]
+	cp BUFFERMON
+	jr z, .prev_storage
 	ld a, [wCurPartyMon]
 	and a
 	jr z, .done
@@ -387,6 +364,9 @@ StatsScreen_JoypadAction:
 	ld c, BLUE_PAGE ; last page
 	jr .set_page
 
+.prev_storage
+	newfarcall PrevStorageBoxMon
+	jr nz, .load_storage_mon
 .done
 	ret
 
@@ -399,6 +379,13 @@ StatsScreen_JoypadAction:
 	call StatsScreen_SetJumptableIndex
 	ret
 
+.next_storage
+	newfarcall NextStorageBoxMon
+	jr z, .done
+.load_storage_mon
+	ld a, [wBufferMonAltSpecies]
+	ld [wCurPartySpecies], a
+	ld [wCurSpecies], a
 .load_mon
 	ld h, 0
 	call StatsScreen_SetJumptableIndex
@@ -484,7 +471,9 @@ StatsScreen_InitUpperHalf:
 .NicknamePointers:
 	dw wPartyMonNicknames
 	dw wOTPartyMonNicknames
-	dw sBoxMonNicknames
+	dw wBufferMonNickname ; unused
+	dw wBufferMonNickname ; unused
+	dw wBufferMonNickname ; unused
 	dw wBufferMonNickname
 
 StatsScreen_PlaceVerticalDivider: ; unreferenced
@@ -818,7 +807,9 @@ LoadBluePage:
 .OTNamePointers:
 	dw wPartyMonOTs
 	dw wOTPartyMonOTs
-	dw sBoxMonOTs
+	dw wBufferMonOT ; unused
+	dw wBufferMonOT ; unused
+	dw wBufferMonOT ; unused
 	dw wBufferMonOT
 
 IDNoString:
@@ -921,9 +912,11 @@ StatsScreen_GetAnimationParam:
 .Jumptable:
 	dw .PartyMon
 	dw .OTPartyMon
-	dw .BoxMon
+	dw .BoxMon ; unused
+	dw .Tempmon ; unused
 	dw .Tempmon
 	dw .Wildmon
+	dw .Buffermon
 
 .PartyMon:
 	ld a, [wCurPartyMon]
@@ -939,20 +932,7 @@ StatsScreen_GetAnimationParam:
 	ret
 
 .BoxMon:
-	ld hl, sBoxMons
-	ld bc, PARTYMON_STRUCT_LENGTH
-	ld a, [wCurPartyMon]
-	call AddNTimes
-	ld b, h
-	ld c, l
-	ld a, BANK(sBoxMons)
-	call OpenSRAM
-	call .CheckEggFaintedFrzSlp
-	push af
-	call CloseSRAM
-	pop af
-	ret
-
+.Buffermon
 .Tempmon:
 	ld bc, wTempMonSpecies
 	jr .CheckEggFaintedFrzSlp ; utterly pointless
@@ -1155,20 +1135,6 @@ StatsScreen_LoadPageIndicators:
 CopyNickname:
 	ld de, wStringBuffer1
 	ld bc, MON_NAME_LENGTH
-	jr .okay ; utterly pointless
-.okay
-	ld a, [wMonType]
-	cp BOXMON
-	jr nz, .partymon
-	ld a, BANK(sBoxMonNicknames)
-	call OpenSRAM
-	push de
-	call CopyBytes
-	pop de
-	call CloseSRAM
-	ret
-
-.partymon
 	push de
 	call CopyBytes
 	pop de
@@ -1184,7 +1150,7 @@ GetNicknamenamePointer:
 	ld h, [hl]
 	ld l, a
 	ld a, [wMonType]
-	cp TEMPMON
+	cp BUFFERMON
 	ret z
 	ld a, [wCurPartyMon]
 	jp SkipNames
