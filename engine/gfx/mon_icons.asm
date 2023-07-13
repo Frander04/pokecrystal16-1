@@ -3,8 +3,7 @@ LoadOverworldMonIcon:
 	ld [wCurIcon], a
 	; fallthrough
 _LoadOverworldMonIcon:
-	ld l, a
-	ld h, 0
+	call GetPokemonIndexFromID
 	add hl, hl
 	ld de, IconPointers
 	add hl, de
@@ -109,13 +108,18 @@ _FinishMenuMonIconColor:
 GetMonPalInBCDE:
 ; Sets BCDE to mon icon palette.
 ; Input: c = species, b = shininess (1=true, 0=false)
+	ld a, c
+	call GetPokemonIndexFromID
+	dec hl
+	ld d, h
+	ld e, l
+
 	ld hl, MonMenuIconPals
-	dec c
 
 	; This sets z if mon is shiny.
 	dec b
 	ld b, 0
-	add hl, bc
+	add hl, de
 	ld a, [hl]
 	jr z, .shiny
 	swap a
@@ -148,9 +152,10 @@ GetMenuMonIconPalette:
 GetMenuMonIconPalette_PredeterminedShininess:
 	push af
 	ld a, [wCurPartySpecies]
-	dec a
-	ld c, a
-	ld b, 0
+	call GetPokemonIndexFromID
+	dec hl
+	ld b, h
+	ld c, l
 	ld hl, MonMenuIconPals
 	add hl, bc
 	ld e, [hl]
@@ -485,12 +490,15 @@ endr
 	push hl
 
 	ld a, [wCurIcon]
+	cp EGG
 	push hl
-	ld l, a
-	ld h, 0
+	ld hl, IconPointers - (3 * 2)
+	jr z, .is_egg
+	call GetPokemonIndexFromID
 	add hl, hl
 	ld de, IconPointers
 	add hl, de
+.is_egg
 	ld a, [hli]
 	ld e, a
 	ld d, [hl]
@@ -503,11 +511,19 @@ endr
 	ret
 
 GetIconBank:
+    push hl
 	ld a, [wCurIcon]
-	cp MAGIKARP ; first species in "Mon Icons 2"
+	call GetPokemonIndexFromID
+	ld a, h
+	cp HIGH(MAGIKARP) ; first species in "Mon Icons 2"
 	lb bc, BANK("Mon Icons 1"), 8
-	ret c
+	jr c, .return
+	ld a, l
+	cp LOW(MAGIKARP)
+	jr c, .return
 	ld b, BANK("Mon Icons 2")
+.return
+	pop hl
 	ret
 
 GetGFXUnlessMobile:
