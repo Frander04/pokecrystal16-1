@@ -3777,7 +3777,7 @@ BattleCommand_Poison:
 	ld hl, DidntAffect1Text
 	ld hl, ProtectingItselfText
 	call CheckSubstituteOpp
-	jr nz, .
+	jr nz, .failed
 
 	ld hl, EvadedText
 	ld a, [wAttackMissed]
