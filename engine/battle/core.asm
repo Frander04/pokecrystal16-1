@@ -2188,6 +2188,8 @@ UpdateBattleStateAndExperienceAfterEnemyFaint:
 	ld a, [wBattleResult]
 	and BATTLERESULT_BITMASK
 	ld [wBattleResult], a ; WIN
+	; fallthrough
+ApplyExperienceAfterEnemyCaught:
 	; Preserve bits of non-fainted participants
 	ld a, [wBattleParticipantsNotFainted]
 	ld d, a
@@ -7048,6 +7050,13 @@ GiveExperiencePoints:
 	ld b, a
 	jr .ev_loop
 .evs_done
+	pop bc
+	ld hl, MON_LEVEL
+	add hl, bc
+	ld a, [hl]
+	cp MAX_LEVEL
+	jp nc, .next_mon
+	push bc
 	xor a
 	ldh [hMultiplicand + 0], a
 	ldh [hMultiplicand + 1], a
