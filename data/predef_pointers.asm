@@ -39,7 +39,6 @@ PredefPointers::
 	add_predef TradeAnimation
 	add_predef CopyMonToTempMon
 	add_predef ListMoves
-	add_predef PlaceNonFaintStatus
 	add_predef Unused_PlaceEnemyHPLevel
 	add_predef ListMovePP
 	add_predef GetGender
@@ -74,4 +73,6 @@ PredefPointers::
 	add_predef CheckTypeMatchup
 	add_predef ConvertMon_1to2
 	add_predef NewPokedexEntry
-	add_predef PlaceStatusString
+	add_predef GetStatusConditionIndex
+	add_predef Player_LoadNonFaintStatus
+	add_predef Enemy_LoadNonFaintStatus

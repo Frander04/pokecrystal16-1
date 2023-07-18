@@ -3706,7 +3706,14 @@ BattleCommand_SleepTarget:
 	inc a
 	ld [de], a
 	call UpdateOpponentInParty
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
 
 	ld hl, FellAsleepText
 	call StdBattleTextbox
@@ -3747,7 +3754,14 @@ BattleCommand_PoisonTarget:
 	call PoisonOpponent
 	ld de, ANIM_PSN
 	call PlayOpponentBattleAnim
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
 
 	ld hl, WasPoisonedText
 	call StdBattleTextbox
@@ -3817,7 +3831,15 @@ BattleCommand_Poison:
 .apply_poison
 	call AnimateCurrentMove
 	call PoisonOpponent
-	jp RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
+	ret
 
 .check_toxic
 	ld a, BATTLE_VARS_SUBSTATUS5_OPP
@@ -3988,7 +4010,14 @@ BattleCommand_BurnTarget:
 	call CallBattleCore
 	ld de, ANIM_BRN
 	call PlayOpponentBattleAnim
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
 
 	ld hl, WasBurnedText
 	call StdBattleTextbox
@@ -4053,7 +4082,14 @@ BattleCommand_FreezeTarget:
 	call UpdateOpponentInParty
 	ld de, ANIM_FRZ
 	call PlayOpponentBattleAnim
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
 
 	ld hl, WasFrozenText
 	call StdBattleTextbox
@@ -4101,7 +4137,15 @@ BattleCommand_ParalyzeTarget:
 	call CallBattleCore
 	ld de, ANIM_PAR
 	call PlayOpponentBattleAnim
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
+
 	call PrintParalyze
 	ld hl, UseHeldStatusHealingItem
 	jp CallBattleCore
@@ -5839,10 +5883,10 @@ BattleCommand_Confuse_CheckSnore_Swagger_ConfuseHit:
 
 BattleCommand_Paralyze:
 	call CheckForStatusIfAlreadyHasAny
-	jr nz, .paralyzed
+	jp nz, .paralyzed
 	ld a, [wTypeModifier]
 	and $7f
-	jr z, .didnt_affect
+	jp z, .didnt_affect
 	call GetOpponentItem
 	ld a, b
 	cp HELD_PREVENT_PARALYZE
@@ -5875,6 +5919,11 @@ BattleCommand_Paralyze:
 	call UpdateOpponentInParty
 	ld hl, ApplyPrzEffectOnSpeed
 	call CallBattleCore
+
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
 	call UpdateBattleHuds
 	call PrintParalyze
 	ld hl, UseHeldStatusHealingItem
@@ -6090,7 +6139,15 @@ BattleCommand_Heal:
 	call CallBattleCore
 	call BattleCommand_SwitchTurn
 	call UpdateUserInParty
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
+
 	ld hl, RegainedHealthText
 	jp StdBattleTextbox
 
@@ -6322,7 +6379,15 @@ BattleCommand_Defrost:
 	res FRZ, [hl]
 
 .done
-	call RefreshBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	call SetPalettes
+	call DelayFrame	
+	call UpdateBattleHuds
+	ld c, 3
+	call DelayFrames
+	call WaitBGMap
+
 	ld hl, WasDefrostedText
 	jp StdBattleTextbox
 

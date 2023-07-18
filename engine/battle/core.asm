@@ -196,6 +196,9 @@ BattleTurn:
 	jr nz, .quit
 .skip_iteration
 	call ParsePlayerAction
+	push af
+	call ClearSprites
+	pop af
 	jr nz, .loop1
 
 	call EnemyTriesToFlee
@@ -617,7 +620,7 @@ ParsePlayerAction:
 	cp BATTLEPLAYERACTION_SWITCH
 	jp z, .reset_rage
 	and a
-	jr nz, .reset_bide
+	jp nz, .reset_bide
 	ld a, [wPlayerSubStatus3]
 	and 1 << SUBSTATUS_BIDE
 	jr nz, .locked_in
@@ -636,7 +639,8 @@ ParsePlayerAction:
 	call MoveSelectionScreen
 	push af
 	call SafeLoadTempTilemapToTilemap
-	call UpdateBattleHuds
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
 	ld a, [wCurPlayerMove]
 	call GetMoveIndexFromID
 	ld a, h
@@ -3509,6 +3513,8 @@ OfferSwitch:
 	call ClearPalettes
 	call DelayFrame
 	call _LoadHPBar
+	call GetBattleMonBackpic
+	call WaitBGMap
 	pop af
 	ld [wCurPartyMon], a
 	xor a
@@ -3521,6 +3527,8 @@ OfferSwitch:
 	call ClearPalettes
 	call DelayFrame
 	call _LoadHPBar
+	call GetBattleMonBackpic
+	call WaitBGMap
 
 .said_no
 	pop af
@@ -4689,20 +4697,18 @@ PrintPlayerHUD:
 .got_gender_char
 	hlcoord 17, 8
 	ld [hl], a
-	hlcoord 14, 8
-	push af ; back up gender
-	push hl
-	ld de, wBattleMonStatus
-	predef PlaceNonFaintStatus
-	pop hl
-	pop bc
-	ret nz
-	ld a, b
-	cp " "
-	jr nz, .copy_level ; male or female
-	dec hl ; genderless
-
-.copy_level
+; Player Mon Status Condition GFX
+	predef Player_LoadNonFaintStatus ; loads needed Status Conditon GFX into VRAM
+ 	ld a, c
+	and a 
+	jr z, .status_done ; if Mon is fainted, or it doesnt have a Status Cond, dont print Tiles
+; place status tiles:
+	hlcoord 10, 8 ; status icon tile 1
+	ld [hl], $70
+	inc hl
+	ld [hl], $71
+.status_done
+	hlcoord 14, 8 ; where the player mon's lvl is printed
 	ld a, [wBattleMonLevel]
 	ld [wTempMonLevel], a
 	jp PrintLevel
@@ -4765,20 +4771,17 @@ DrawEnemyHUD:
 .got_gender
 	hlcoord 9, 1
 	ld [hl], a
-
-	hlcoord 6, 1
-	push af
-	push hl
-	ld de, wEnemyMonStatus
-	predef PlaceNonFaintStatus
-	pop hl
-	pop bc
-	jr nz, .skip_level
-	ld a, b
-	cp " "
-	jr nz, .print_level
-	dec hl
-.print_level
+; Enemy Status Condition GFX
+	predef Enemy_LoadNonFaintStatus ; load Status Condition GFX Tiles
+	ld a, c
+	and a
+	jr z, .status_done ; if Mon is fainted, or it doesnt have a Status Cond, dont print Tiles
+	hlcoord 2, 1
+	ld [hl], $72 ; enemy status left half
+	inc hl
+	ld [hl], $73 ; enemy status left half
+.status_done
+	hlcoord 6, 1 ; enemy's level
 	ld a, [wEnemyMonLevel]
 	ld [wTempMonLevel], a
 	call PrintLevel
@@ -5090,6 +5093,8 @@ BattleMenuPKMN_Loop:
 	call DelayFrame
 	call _LoadHPBar
 	call CloseWindow
+	call GetBattleMonBackpic
+	call WaitBGMap
 	call LoadTilemapToTempTilemap
 	call GetMemSGBLayout
 	call SetPalettes
@@ -5177,6 +5182,8 @@ TryPlayerSwitch:
 	call ClearSprites
 	call _LoadHPBar
 	call CloseWindow
+	call GetBattleMonBackpic
+	call WaitBGMap
 	call GetMemSGBLayout
 	call SetPalettes
 	ld a, [wCurPartyMon]
@@ -5517,6 +5524,11 @@ MoveSelectionScreen:
 	ld hl, BattleText_TheresNoPPLeftForThisMove
 
 .place_textbox_start_over
+	push hl
+	call ClearSprites
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
+	pop hl
 	call StdBattleTextbox
 	call SafeLoadTempTilemapToTilemap
 	jp MoveSelectionScreen
@@ -5633,9 +5645,9 @@ MoveInfoBox:
 	xor a
 	ldh [hBGMapMode], a
 
-	hlcoord 0, 8
-	ld b, 3
-	ld c, 9
+	hlcoord 0, 7 ; upper right corner of the textbox
+	ld b, 4 ; Box height
+	ld c, 7 ; Box length
 	call Textbox
 	call MobileTextBorder
 
@@ -5650,10 +5662,10 @@ MoveInfoBox:
 	cp b
 	jr nz, .not_disabled
 
-	hlcoord 1, 10
+	hlcoord 1, 11
 	ld de, .Disabled
 	call PlaceString
-	jr .done
+	jp .done
 
 .not_disabled
 	ld hl, wMenuCursorY
@@ -5684,22 +5696,100 @@ MoveInfoBox:
 	ld [wStringBuffer1], a
 	call .PrintPP
 	farcall UpdateMoveData
-	ld a, [wPlayerMoveStruct + MOVE_ANIM]
-	ld b, a
-	farcall GetMoveCategoryName
-	hlcoord 1, 9
-	ld de, wStringBuffer1
+	farcall LoadBattleCategoryAndTypePals
+	call SetPalettes
+
+	ld a, [wPlayerMoveStruct + MOVE_TYPE]
+	and TYPE_MASK
+	ld c, a ; farcall will clobber a for the bank
+	farcall GetMonTypeIndex
+	ld a, c ; Type Index
+	ld hl, TypeIconGFX ; from gfx\battle\types.png, uses Color 4
+	ld bc, 4 * LEN_1BPP_TILE ; Type GFX is 4 Tiles Wide
+	call AddNTimes
+	ld d, h
+	ld e, l
+	ld hl, vTiles2 tile $55 
+	lb bc, BANK(TypeIconGFX), 4 ; bank in 'b', Num of Tiles in 'c'
+	call Request1bpp
+	hlcoord 4, 11 ; placing the Type Tiles in  the MoveInfoBox
+	ld b, 6
+	ld [hl], $55
+	inc hl
+	ld [hl], $56
+	inc hl
+	ld [hl], $57
+	inc hl
+	ld [hl], $58
+	ld a, [wPlayerMoveStruct + MOVE_TYPE]
+	and ~TYPE_MASK
+	swap a
+	srl a
+	srl a
+	dec a
+	ld hl, CategoryIconGFX
+	ld bc, 2 tiles ; Move Category is 2 Tiles wide 
+	call AddNTimes
+	ld d, h
+	ld e, l
+	ld hl, vTiles2 tile $59
+	lb bc, BANK(CategoryIconGFX), 2 ; bank in 'b', Num of Tiles in 'c'
+	call Request2bpp ; Load 2bpp at b:de to occupy c tiles of hl.
+	hlcoord 1, 11 ; placing the Category Tiles in the MoveInfoBox
+    ld b, 6
+	ld [hl], $59
+	inc hl
+	ld [hl], $5a
+
+; print move PW (Power)
+	ld de, .power_string ; "PW"
+	hlcoord 1, 8
 	call PlaceString
 
-	ld h, b
-	ld l, c
-	ld [hl], "/"
-
-	ld a, [wPlayerMoveStruct + MOVE_ANIM]
-	ld b, a
-	hlcoord 2, 10
-	predef PrintMoveType
-
+	hlcoord 4, 8
+	ld a, [wPlayerMoveStruct + MOVE_POWER]
+	and a
+	jr nz, .haspower
+	ld de, .nopower_string ; "---"
+	call PlaceString
+	jr .print_acc
+.haspower	
+	ld [wTextDecimalByte], a
+	ld de, wTextDecimalByte
+	lb bc, 1, 3 ; number of bytes this number is in, in 'b', number of possible digits in 'c'
+	call PrintNum
+	
+; print move ACC
+.print_acc
+	hlcoord 1, 9
+	ld de, .accuracy_string ; "ACC"
+	call PlaceString
+	hlcoord 7, 9
+	ld [hl], "%"
+	hlcoord 4, 9
+	ld a, [wPlayerMoveStruct + MOVE_ACC]
+; convert from hex to decimal
+; this is the same code used in function "Adjust_Percent" in engine\pokemon\mon_stats.asm
+	ldh [hMultiplicand], a
+	ld a, 100
+	ldh [hMultiplier], a
+	call Multiply
+	; Divide hDividend length b (max 4 bytes) by hDivisor. Result in hQuotient.
+	ld b, 2
+	ld a, 255
+	ldh [hDivisor], a
+	call Divide
+	ldh a, [hQuotient + 3]
+	cp 100
+	jr z, .print_num
+	inc a
+.print_num
+	ld [wTextDecimalByte], a
+	ld de, wTextDecimalByte
+	lb bc, 1, 3 ; number of bytes this number is in, in 'b', number of possible digits in 'c'
+	call PrintNum
+	ld b, SCGB_BATTLE_COLORS
+	call GetSGBLayout
 .done
 	ret
 
@@ -5707,12 +5797,7 @@ MoveInfoBox:
 	db "Disabled!@"
 
 .PrintPP:
-	hlcoord 5, 11
-	ld a, [wLinkMode] ; What's the point of this check?
-	cp LINK_MOBILE
-	jr c, .ok
-	hlcoord 5, 11
-.ok
+	hlcoord 3, 10
 	push hl
 	ld de, wStringBuffer1
 	lb bc, 1, 2
@@ -5725,7 +5810,17 @@ MoveInfoBox:
 	ld de, wNamedObjectIndex
 	lb bc, 1, 2
 	call PrintNum
+	hlcoord 1, 10
+	ld a, "P"
+	ld [hli], a
+	ld [hl], a
 	ret
+.power_string:
+	db "PW@"
+.nopower_string:
+	db "---@"
+.accuracy_string:
+	db "AC@"
 
 CheckPlayerHasUsableMoves:
 	ld hl, STRUGGLE
@@ -7900,7 +7995,18 @@ PlaceExpBar:
 .next
 	add $8
 	jr z, .loop2
-	add $54 ; tile to the left of small exp bar tile
+	push hl
+	push af
+	hlcoord 9, 0 ; coord of HP bar label, usually 0,9
+	ld a, [hl]
+	ld b, $62
+	cp $e8 ; if we are in stats screen
+	jr nz, .inbattle
+	ld b, $54
+.inbattle
+	pop af
+	pop hl
+	add b
 	jr .skip
 
 .loop2
