@@ -136,7 +136,6 @@
 	charmap "ñ",         $ca
 	charmap "¿",         $cb
 	charmap "¡",         $cc
-    charmap "%",         $cd
 
 	charmap "′",         $ce
 	charmap "″",         $cf
@@ -147,7 +146,7 @@
 	charmap "'r",        $d3
 	charmap "'s",        $d4
 	charmap "'t",        $d5
-	charmap "'v",        $d6
+    charmap "%",         $d6
 
 	charmap "■",         $d7
 	charmap "▲",         $d8

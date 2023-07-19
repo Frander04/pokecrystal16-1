@@ -117,10 +117,6 @@ Pokegear_LoadGFX:
 	ld de, vTiles2
 	ld a, BANK(TownMapGFX)
 	call FarDecompress
-	ld hl, PokegearGFX
-	ld de, vTiles2 tile $30
-	ld a, BANK(PokegearGFX)
-	call FarDecompress
 	ld hl, PokegearSpritesGFX
 	ld de, vTiles0
 	ld a, BANK(PokegearSpritesGFX)
@@ -2033,7 +2029,7 @@ _FlyMap:
 	xor a
 	ldh [hBGMapMode], a
 	farcall ClearSpriteAnims
-	call LoadTownMapGFX
+	call LoadTownMapGFX2
 	ld de, FlyMapLabelBorderGFX
 	ld hl, vTiles2 tile $30
 	lb bc, BANK(FlyMapLabelBorderGFX), 6
@@ -2350,7 +2346,7 @@ Pokedex_GetArea:
 	ld hl, vTiles0 tile $78
 	ld c, 4
 	call Request2bpp
-	call LoadTownMapGFX
+	call LoadTownMapGFX2
 	call FillKantoMap
 	call .PlaceString_MonsNest
 	call TownMapPals
@@ -2658,8 +2654,8 @@ TownMapPals:
 ; Current tile
 	ld a, [hli]
 	push hl
-; The palette map covers tiles $00 to $5f; $60 and above use palette 0
-	cp $60
+; The palette map covers tiles $00 to $7e; $7f and above use palette 0
+	cp $7f
 	jr nc, .pal0
 
 ; The palette data is condensed to nybbles, least-significant first.
@@ -2775,9 +2771,16 @@ TownMapPlayerIcon:
 LoadTownMapGFX:
 	ld hl, TownMapGFX
 	ld de, vTiles2
-	lb bc, BANK(TownMapGFX), 48
+	lb bc, BANK(TownMapGFX), 50
 	call DecompressRequest2bpp
 	ret
+
+ LoadTownMapGFX2:
+ 	ld hl, TownMapGFX
+ 	ld de, vTiles2
+	lb bc, BANK(TownMapGFX), 96
+ 	call DecompressRequest2bpp
+ 	ret
 
 JohtoMap:
 INCBIN "gfx/pokegear/johto.bin"

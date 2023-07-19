@@ -643,13 +643,13 @@ YoungsterGroup:
 
 	; One badges
 	db TRAINERTYPE_NORMAL
-	db 10
+	db 15
 	dw RATTATA
 	db $fe ; delimiter
 
 	; Two badges
 	db TRAINERTYPE_NORMAL
-	db 20
+	db 25
 	dw RATICATE
 	db -1 ; end
 
