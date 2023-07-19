@@ -256,6 +256,7 @@ MoveDescriptions1:
 	dw RockSmashDescription
 	dw WhirlpoolDescription
 	dw BeatUpDescription
+	dw RockClimbDescription
 .IndirectEnd::
 
 InvalidMoveDescription:
@@ -1264,3 +1265,7 @@ WhirlpoolDescription:
 BeatUpDescription:
 	db   "Party #MON join"
 	next "in the attack.@"
+
+RockClimbDescription:
+	db   "A charging attack"
+	next "that may confuse.@"

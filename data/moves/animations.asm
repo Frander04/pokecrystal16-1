@@ -279,6 +279,7 @@ BattleAnimations::
 	dw BattleAnim_RockSmash
 	dw BattleAnim_Whirlpool
 	dw BattleAnim_BeatUp
+	dw BattleAnim_RockClimb
 	assert_table_length NUM_ATTACKS + 1
 	dw BattleAnim_SweetScent2
 
@@ -2943,6 +2944,7 @@ BattleAnim_Barrier:
 	anim_wait 32
 	anim_ret
 
+BattleAnim_RockClimb:
 BattleAnim_Waterfall:
 	anim_1gfx ANIM_GFX_HIT
 	anim_call BattleAnim_TargetObj_2Row

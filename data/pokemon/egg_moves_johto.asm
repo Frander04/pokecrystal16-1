@@ -305,6 +305,7 @@ GligarEggMoves:
 	dw WING_ATTACK
 	dw RAZOR_WIND
 	dw COUNTER
+	dw ROCK_CLIMB
 	dw -1 ; end
 
 SnubbullEggMoves:

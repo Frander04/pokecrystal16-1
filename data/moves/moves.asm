@@ -269,4 +269,5 @@ Moves1:
 	move EFFECT_DEFENSE_DOWN_HIT,   20, FIGHTING,      PHYSICAL, 100, 15,  50      ;ROCK_SMASH
 	move EFFECT_TRAP_TARGET,        15, WATER,         SPECIAL,   70, 15,   0      ;WHIRLPOOL
 	move EFFECT_BEAT_UP,            10, DARK,          PHYSICAL, 100, 10,   0      ;BEAT_UP
+	move EFFECT_CONFUSE_HIT,        90, NORMAL,        PHYSICAL,  85, 20,  20      ;ROCK_CLIMB
 .IndirectEnd::

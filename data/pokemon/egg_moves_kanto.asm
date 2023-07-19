@@ -217,6 +217,7 @@ SandshrewEggMoves:
 	dw COUNTER
 	dw RAPID_SPIN
 	dw METAL_CLAW
+	dw ROCK_CLIMB
 	dw -1 ; end
 
 NidoranFEggMoves:
@@ -361,6 +362,7 @@ TentacoolEggMoves:
 GeodudeEggMoves:
 	dw MEGA_PUNCH
 	dw ROCK_SLIDE
+	dw ROCK_CLIMB
 	dw -1 ; end
 
 PonytaEggMoves:
@@ -427,6 +429,7 @@ GastlyEggMoves:
 OnixEggMoves:
 	dw ROCK_SLIDE
 	dw FLAIL
+	dw ROCK_CLIMB
 	dw -1 ; end
 
 DrowzeeEggMoves:
@@ -482,6 +485,7 @@ RhyhornEggMoves:
 	dw PURSUIT
 	dw COUNTER
 	dw MAGNITUDE
+	dw ROCK_CLIMB
 	dw -1 ; end
 
 ChanseyEggMoves:
