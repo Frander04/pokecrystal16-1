@@ -2733,14 +2733,13 @@ wBaseItem2:: db
 wBaseGender:: db
 wBaseEggSteps:: db
 wBasePicSize:: db
-wBaseUnusedFrontpic:: dw
-wBaseUnusedBackpic:: dw
 wBaseGrowthRate:: db
 wBaseEggGroups:: db
 wBaseTMHM:: flag_array NUM_TM_HM_TUTOR
 wCurBaseDataEnd::
 	assert wCurBaseDataEnd - wCurBaseData == BASE_DATA_SIZE
 
+	ds 6
 wCurDamage:: dw
 
 wTilesetDataAddress:: dw
