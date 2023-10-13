@@ -51,12 +51,6 @@ UnownFont::
 INCBIN "gfx/font/unown_font.2bpp"
 
 
-SECTION "Pokégear GFX", ROMX
-
-PokegearGFX::
-INCBIN "gfx/pokegear/pokegear.2bpp.lz"
-
-
 SECTION "Bill's PC Graphics", ROMX
 
 BillsPC_TileGFX::   INCBIN "gfx/pc/pc.2bpp.lz"
