@@ -257,6 +257,7 @@ MoveDescriptions1:
 	dw WhirlpoolDescription
 	dw BeatUpDescription
 	dw RockClimbDescription
+	dw HailDescription
 .IndirectEnd::
 
 InvalidMoveDescription:
@@ -1269,3 +1270,7 @@ BeatUpDescription:
 RockClimbDescription:
 	db   "A charging attack"
 	next "that may confuse.@"
+
+HailDescription:
+	db   "Damages all #MON"
+	next "except Ice-types.@"
