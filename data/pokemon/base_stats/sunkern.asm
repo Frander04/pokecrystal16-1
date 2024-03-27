@@ -1,4 +1,4 @@
-	db SUNKERN ; 191
+	db 0 ; species ID placeholder
 
 	db  30,  30,  30,  30,  30,  30
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db GRASS, GRASS ; type
 	db 235 ; catch rate
 	db 52 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

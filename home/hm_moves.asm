@@ -1,7 +1,10 @@
 ; HM moves can't be forgotten
 
 IsHM::
-	cp HM01
+	push hl
+	call GetItemIndexFromID
+	cphl16 HM01
+	pop hl
 	jr c, .NotHM
 	scf
 	ret
@@ -10,16 +13,19 @@ IsHM::
 	ret
 
 IsHMMove::
+	call GetMoveIndexFromID
+	ld b, h
+	ld c, l
 	ld hl, .HMMoves
-	ld de, 1
-	jp IsInArray
+	ld de, 2
+	jp IsInWordArray
 
 .HMMoves:
-	db CUT
-	db FLY
-	db SURF
-	db STRENGTH
-	db FLASH
-	db WATERFALL
-	db WHIRLPOOL
-	db -1 ; end
+	dw CUT
+	dw FLY
+	dw SURF
+	dw STRENGTH
+	dw FLASH
+	dw WATERFALL
+	dw WHIRLPOOL
+	dw -1 ; end

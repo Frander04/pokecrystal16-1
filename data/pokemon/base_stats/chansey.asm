@@ -1,4 +1,4 @@
-	db CHANSEY ; 113
+	db 0 ; species ID placeholder
 
 	db 250,  05,  05,  50,  35, 105
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db NORMAL, NORMAL ; type
 	db 30 ; catch rate
 	db 255 ; base exp
-	db NO_ITEM, LUCKY_EGG ; items
+	dw NO_ITEM, LUCKY_EGG ; items
 	db GENDER_F100 ; gender ratio
 	db 100 ; unknown 1
 	db 40 ; step cycles to hatch

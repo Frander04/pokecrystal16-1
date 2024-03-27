@@ -1,4 +1,4 @@
-	db CLOYSTER ; 091
+	db 0 ; species ID placeholder
 
 	db  50,  95, 180,  70,  85,  45
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db WATER, ICE ; type
 	db 60 ; catch rate
 	db 203 ; base exp
-	db PEARL, BIG_PEARL ; items
+	dw PEARL, BIG_PEARL ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

@@ -52,8 +52,8 @@ _PlayBattleAnim:
 
 BattleAnimRunScript:
 	ld a, [wFXAnimID + 1]
-	and a
-	jr nz, .hi_byte
+	add a, a
+	jr c, .play_anyway
 
 	farcall CheckBattleScene
 	jr c, .disabled
@@ -88,7 +88,7 @@ BattleAnimRunScript:
 	ld a, h
 	ld [wFXAnimID + 1], a
 
-.hi_byte
+.play_anyway
 	call WaitSFX
 	call PlayHitSound
 	call RunBattleAnimScript
@@ -109,11 +109,15 @@ RunBattleAnimScript:
 
 ; Speed up Rollout's animation.
 	ld a, [wFXAnimID + 1]
-	or a
+	if HIGH(ROLLOUT)
+		cp HIGH(ROLLOUT)
+	else
+		or a
+	endc
 	jr nz, .not_rollout
 
 	ld a, [wFXAnimID]
-	cp ROLLOUT
+	cp LOW(ROLLOUT)
 	jr nz, .not_rollout
 
 	ld a, BATTLE_BG_EFFECT_ROLLOUT
@@ -357,7 +361,7 @@ BattleAnimCommands::
 	dw BattleAnimCmd_OAMOff
 	dw BattleAnimCmd_ClearObjs
 	dw BattleAnimCmd_BeatUp
-	dw BattleAnimCmd_E7
+	dw BattleAnimCmd_IfParamItemEqual
 	dw BattleAnimCmd_UpdateActorPic
 	dw BattleAnimCmd_Minimize
 	dw BattleAnimCmd_EA ; dummy
@@ -545,8 +549,16 @@ BattleAnimCmd_IfVarEqual:
 	ld [hl], d
 	ret
 
+BattleAnimCmd_IfParamItemEqual:
+	call GetBattleAnimByte
+	ld l, a
+	call GetBattleAnimByte
+	ld h, a
+	call GetItemIDFromIndex
+	jr BattleAnimCmd_IfParamEqualContinue
 BattleAnimCmd_IfParamEqual:
 	call GetBattleAnimByte
+BattleAnimCmd_IfParamEqualContinue:
 	ld hl, wBattleAnimParam
 	cp [hl]
 	jr z, .jump

@@ -1,4 +1,4 @@
-	db VOLTORB ; 100
+	db 0 ; species ID placeholder
 
 	db  40,  30,  50, 100,  55,  55
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db ELECTRIC, ELECTRIC ; type
 	db 190 ; catch rate
 	db 103 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_UNKNOWN ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

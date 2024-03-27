@@ -1,4 +1,4 @@
-	db PORYGON2 ; 233
+	db 0 ; species ID placeholder
 
 	db  85,  80,  90,  60, 105,  95
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db NORMAL, NORMAL ; type
 	db 45 ; catch rate
 	db 180 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_UNKNOWN ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

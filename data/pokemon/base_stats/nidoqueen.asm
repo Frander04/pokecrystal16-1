@@ -1,4 +1,4 @@
-	db NIDOQUEEN ; 031
+	db 0 ; species ID placeholder
 
 	db  90,  82,  87,  76,  75,  85
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db POISON, GROUND ; type
 	db 45 ; catch rate
 	db 194 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F100 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

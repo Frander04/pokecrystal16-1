@@ -26,11 +26,9 @@ SetPlayerPalette:
 
 GameCornerPrizeMonCheckDex:
 	ld a, [wScriptVar]
-	dec a
 	call CheckCaughtMon
 	ret nz
 	ld a, [wScriptVar]
-	dec a
 	call SetSeenAndCaughtMon
 	call FadeToMenu
 	ld a, [wScriptVar]
@@ -41,7 +39,6 @@ GameCornerPrizeMonCheckDex:
 
 UnusedSetSeenMon:
 	ld a, [wScriptVar]
-	dec a
 	call SetSeenMon
 	ret
 
@@ -233,7 +230,8 @@ CheckCoinsAndCoinCase:
 	ld a, [hli]
 	or [hl]
 	jr z, .no_coins
-	ld a, COIN_CASE
+	ld hl, COIN_CASE
+	call GetItemIDFromIndex
 	ld [wCurItem], a
 	ld hl, wNumItems
 	call CheckItem

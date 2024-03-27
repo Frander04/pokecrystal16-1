@@ -1,4 +1,4 @@
-	db EKANS ; 023
+	db 0 ; species ID placeholder
 
 	db  35,  60,  44,  55,  40,  54
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db POISON, POISON ; type
 	db 255 ; catch rate
 	db 62 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

@@ -1,4 +1,4 @@
-	db GLOOM ; 044
+	db 0 ; species ID placeholder
 
 	db  60,  65,  70,  40,  85,  75
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db GRASS, POISON ; type
 	db 120 ; catch rate
 	db 132 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

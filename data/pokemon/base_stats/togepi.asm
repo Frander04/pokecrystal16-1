@@ -1,4 +1,4 @@
-	db TOGEPI ; 175
+	db 0 ; species ID placeholder
 
 	db  35,  20,  65,  20,  40,  65
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db NORMAL, NORMAL ; type
 	db 190 ; catch rate
 	db 74 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F12_5 ; gender ratio
 	db 100 ; unknown 1
 	db 10 ; step cycles to hatch

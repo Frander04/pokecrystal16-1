@@ -203,7 +203,7 @@ MACRO giveitem
 		giveitem \1, 1
 	else
 		db giveitem_command
-		db \1 ; item
+		dw \1 ; item
 		db \2 ; quantity
 	endc
 ENDM
@@ -214,7 +214,7 @@ MACRO takeitem
 		takeitem \1, 1
 	else
 		db takeitem_command
-		db \1 ; item
+		dw \1 ; item
 		db \2 ; quantity
 	endc
 ENDM
@@ -222,7 +222,7 @@ ENDM
 	const checkitem_command ; $21
 MACRO checkitem
 	db checkitem_command
-	db \1 ; item
+	dw \1 ; item
 ENDM
 
 	const givemoney_command ; $22
@@ -291,7 +291,7 @@ ENDM
 	const checkpoke_command ; $2c
 MACRO checkpoke
 	db checkpoke_command
-	db \1 ; pkmn
+	dw \1 ; pkmn
 ENDM
 
 	const givepoke_command ; $2d
@@ -304,9 +304,9 @@ MACRO givepoke
 		givepoke \1, \2, \3, TRUE, \4, \5
 	else
 		db givepoke_command
-		db \1 ; pokemon
+		dw \1 ; pokemon
 		db \2 ; level
-		db \3 ; item
+		dw \3 ; item
 		db \4 ; trainer
 		if \4
 			dw \5 ; nickname_pointer
@@ -318,7 +318,7 @@ ENDM
 	const giveegg_command ; $2e
 MACRO giveegg
 	db giveegg_command
-	db \1 ; pkmn
+	dw \1 ; pkmn
 	db \2 ; level
 ENDM
 
@@ -429,14 +429,14 @@ ENDM
 	const getmonname_command ; $40
 MACRO getmonname
 	db getmonname_command
-	db \2 ; pokemon
+	dw \2 ; pokemon
 	db \1 ; string_buffer
 ENDM
 
 	const getitemname_command ; $41
 MACRO getitemname
 	db getitemname_command
-	db \2 ; item
+	dw \2 ; item
 	db \1 ; string_buffer
 ENDM
 
@@ -563,7 +563,7 @@ ENDM
 	const pokepic_command ; $56
 MACRO pokepic
 	db pokepic_command
-	db \1 ; pokemon
+	dw \1 ; pokemon
 ENDM
 
 	const closepokepic_command ; $57
@@ -599,7 +599,7 @@ ENDM
 	const loadwildmon_command ; $5d
 MACRO loadwildmon
 	db loadwildmon_command
-	db \1 ; pokemon
+	dw \1 ; pokemon
 	db \2 ; level
 ENDM
 
@@ -988,7 +988,7 @@ MACRO verbosegiveitem
 		verbosegiveitem \1, 1
 	else
 		db verbosegiveitem_command
-		db \1 ; item
+		dw \1 ; item
 		db \2 ; quantity
 	endc
 ENDM
@@ -996,7 +996,7 @@ ENDM
 	const verbosegiveitemvar_command ; $9f
 MACRO verbosegiveitemvar
 	db verbosegiveitemvar_command
-	db \1 ; item
+	dw \1 ; item
 	db \2 ; var
 ENDM
 
@@ -1063,6 +1063,30 @@ ENDM
 	const checksave_command ; $a9
 MACRO checksave
 	db checksave_command
+ENDM
+
+	const loadmonindex_command ; $aa
+MACRO loadmonindex
+	db loadmonindex_command
+	dw \2 ; pokemon
+	db \1 ; 0: don't reserve, 1-8: reserve in specific spot
+ENDM
+
+	const checkmaplockedmons_command ; $ab
+MACRO checkmaplockedmons
+	db checkmaplockedmons_command
+ENDM
+
+	const loaditemindex_command ; $ac
+MACRO loaditemindex
+	db loaditemindex_command
+	dw \2 ; pokemon
+	db \1 ; 0: don't reserve, 1-8: reserve in specific spot
+ENDM
+
+	const checkmaplockeditems_command ; $ad
+MACRO checkmaplockeditems
+	db checkmaplockeditems_command
 ENDM
 
 DEF NUM_EVENT_COMMANDS EQU const_value

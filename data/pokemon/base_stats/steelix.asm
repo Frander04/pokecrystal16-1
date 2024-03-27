@@ -1,4 +1,4 @@
-	db STEELIX ; 208
+	db 0 ; species ID placeholder
 
 	db  75,  85, 200,  30,  55,  65
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db STEEL, GROUND ; type
 	db 25 ; catch rate
 	db 196 ; base exp
-	db NO_ITEM, METAL_COAT ; items
+	dw NO_ITEM, METAL_COAT ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 25 ; step cycles to hatch

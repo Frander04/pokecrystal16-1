@@ -1,4 +1,4 @@
-	db LANTURN ; 171
+	db 0 ; species ID placeholder
 
 	db 125,  58,  58,  67,  76,  76
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db WATER, ELECTRIC ; type
 	db 75 ; catch rate
 	db 156 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

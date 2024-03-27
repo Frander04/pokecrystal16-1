@@ -1,4 +1,4 @@
-	db SHUCKLE ; 213
+	db 0 ; species ID placeholder
 
 	db  20,  10, 230,  05,  10, 230
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db BUG, ROCK ; type
 	db 190 ; catch rate
 	db 80 ; base exp
-	db BERRY, BERRY ; items
+	dw BERRY, BERRY ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

@@ -1,4 +1,4 @@
-	db STARYU ; 120
+	db 0 ; species ID placeholder
 
 	db  30,  45,  55,  85,  70,  55
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db WATER, WATER ; type
 	db 225 ; catch rate
 	db 106 ; base exp
-	db STARDUST, STAR_PIECE ; items
+	dw STARDUST, STAR_PIECE ; items
 	db GENDER_UNKNOWN ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

@@ -970,9 +970,20 @@ TrademonStats_WaitBGMap:
 	ret
 
 TrademonStats_PrintSpeciesNumber:
+; input de = address to species number
+	ld a, [de]
+	call GetPokemonIndexFromID
+	ld a, h
+	ld h, l
+	ld l, a
+	push hl
+	ld hl, sp + 0
+	ld d, h
+	ld e, l
 	hlcoord 10, 0
-	lb bc, PRINTNUM_LEADINGZEROS | 1, 3
+	lb bc, PRINTNUM_LEADINGZEROS | 2, 3
 	call PrintNum
+	pop de
 	ld [hl], " "
 	ret
 
@@ -1398,45 +1409,6 @@ TradeAnim_WaitAnim2:
 .done
 	call TradeAnim_AdvanceScriptPointer
 	ret
-
-DebugTrade: ; unreferenced
-; This function was meant for use in Japanese versions, so the
-; constant used for copy length was changed by accident.
-
-	ld hl, .DebugTradeData
-
-	ld a, [hli]
-	ld [wPlayerTrademonSpecies], a
-	ld de, wPlayerTrademonSenderName
-	ld c, NAME_LENGTH + 2 ; JP: NAME_LENGTH_JAPANESE + 2
-.loop1
-	ld a, [hli]
-	ld [de], a
-	inc de
-	dec c
-	jr nz, .loop1
-
-	ld a, [hli]
-	ld [wOTTrademonSpecies], a
-	ld de, wOTTrademonSenderName
-	ld c, NAME_LENGTH + 2 ; JP: NAME_LENGTH_JAPANESE + 2
-.loop2
-	ld a, [hli]
-	ld [de], a
-	inc de
-	dec c
-	jr nz, .loop2
-	ret
-
-MACRO debugtrade
-; species, ot name, ot id
-	db \1, \2
-	dw \3
-ENDM
-
-.DebugTradeData:
-	debugtrade VENUSAUR,  "ゲーフり@@", $0123 ; GAME FREAK
-	debugtrade CHARIZARD, "クりーチャ@", $0456 ; Creatures Inc.
 
 TradeGameBoyTilemap:  INCBIN "gfx/trade/game_boy.tilemap" ; 6x8
 TradeLinkTubeTilemap: INCBIN "gfx/trade/link_cable.tilemap" ; 12x3

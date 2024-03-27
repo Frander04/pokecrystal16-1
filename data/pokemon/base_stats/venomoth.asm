@@ -1,4 +1,4 @@
-	db VENOMOTH ; 049
+	db 0 ; species ID placeholder
 
 	db  70,  65,  60,  90,  90,  75
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db BUG, POISON ; type
 	db 75 ; catch rate
 	db 138 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

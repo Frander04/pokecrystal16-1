@@ -1,4 +1,4 @@
-	db ARBOK ; 024
+	db 0 ; species ID placeholder
 
 	db  60,  85,  69,  80,  65,  79
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db POISON, POISON ; type
 	db 90 ; catch rate
 	db 147 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

@@ -1,4 +1,4 @@
-	db PINECO ; 204
+	db 0 ; species ID placeholder
 
 	db  50,  65,  90,  15,  35,  35
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db BUG, BUG ; type
 	db 190 ; catch rate
 	db 60 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

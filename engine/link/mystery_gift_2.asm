@@ -20,11 +20,14 @@ StageDataForMysteryGift:
 	call CopyBytes
 	push de ; wMysteryGiftStaging+14
 	ld hl, sPokemonData + wPokedexCaught - wPokemonData
-	ld b, wEndPokedexCaught - wPokedexCaught
-	call CountSetBits
+	ld bc, wEndPokedexCaught - wPokedexCaught
+	call CountSetBits16
+	ld a, b
+	add a, -1
+	sbc a
+	or c
 	pop de
 	pop bc
-	ld a, [wNumSetBits]
 	ld [de], a
 	inc de ; wMysteryGiftStaging+15
 	call CloseSRAM
@@ -123,12 +126,17 @@ StageDataForMysteryGift:
 
 MysteryGiftGetItem:
 	ld a, c
-	cp MysteryGiftItems.End - MysteryGiftItems
+	cp (MysteryGiftItems.End - MysteryGiftItems) / 2
 	jr nc, MysteryGiftFallbackItem
 	ld hl, MysteryGiftItems
 	ld b, 0
 	add hl, bc
-	ld c, [hl]
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	call GetItemIDFromIndex
+	ld c, a
 	ret
 
 MysteryGiftGetDecoration:

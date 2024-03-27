@@ -1,4 +1,4 @@
-	db TENTACRUEL ; 073
+	db 0 ; species ID placeholder
 
 	db  80,  70,  65, 100,  80, 120
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db WATER, POISON ; type
 	db 60 ; catch rate
 	db 205 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch

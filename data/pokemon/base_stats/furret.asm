@@ -1,4 +1,4 @@
-	db FURRET ; 162
+	db 0 ; species ID placeholder
 
 	db  85,  76,  64,  90,  45,  55
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db NORMAL, NORMAL ; type
 	db 90 ; catch rate
 	db 116 ; base exp
-	db BERRY, GOLD_BERRY ; items
+	dw BERRY, GOLD_BERRY ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 15 ; step cycles to hatch

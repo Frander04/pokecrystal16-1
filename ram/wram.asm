@@ -135,7 +135,9 @@ wMapTimeOfDay:: db
 
 wPrinterConnectionOpen:: db
 wPrinterOpcode:: db
-wPrevDexEntry:: db
+
+	ds 1
+
 wDisableTextAcceleration:: db
 wPrevLandmark:: db
 wCurLandmark:: db
@@ -716,16 +718,14 @@ ENDU
 UNION
 ; pokedex
 wPokedexDataStart::
-wPokedexOrder:: ds $100 ; >= NUM_POKEMON
-wPokedexOrderEnd::
-wDexListingScrollOffset:: db ; offset of the first displayed entry from the start
+wDexListingScrollOffset:: dw ; offset of the first displayed entry from the start
 wDexListingCursor:: db ; Dex cursor
-wDexListingEnd:: db ; Last mon to display
+wDexListingEnd:: dw ; Last mon to display
 wDexListingHeight:: db ; number of entries displayed at once in the dex listing
 wCurDexMode:: db ; Pokedex Mode
 wDexSearchMonType1:: db ; first type to search
 wDexSearchMonType2:: db ; second type to search
-wDexSearchResultCount:: db
+wDexSearchResultCount:: dw
 wDexArrowCursorPosIndex:: db
 wDexArrowCursorDelayCounter:: db
 wDexArrowCursorBlinkCounter:: db
@@ -734,14 +734,24 @@ wUnlockedUnownMode:: db
 wDexCurUnownIndex:: db
 wDexUnownCount:: db
 wDexConvertedMonType:: db ; mon type converted from dex search mon type
-wDexListingScrollOffsetBackup:: db
+wDexListingScrollOffsetBackup:: dw
 wDexListingCursorBackup:: db
 wBackupDexListingCursor:: db
-wBackupDexListingPage:: db
+wBackupDexListingPage:: dw
 wDexCurLocation:: db
 wPokedexStatus:: db
+wPokedexDisplayNumber:: dw
+wDexLastSeenIndex:: db ; index into wPokedexSeen containing the last non-zero value
+wDexLastSeenValue:: db ; value at index
+wDexTempCounter:: dw
 wPokedexDataEnd::
-	ds 2
+
+wPrevDexEntry:: dw
+wPrevDexEntryBackup:: dw
+wPrevDexEntryJumptableIndex:: db
+
+wPokedexNameBuffer:: ds MON_NAME_LENGTH
+	ds 231
 
 NEXTU
 ; pokegear
@@ -919,8 +929,8 @@ SECTION UNION "Overworld Map", WRAM0
 wBillsPCData::
 wBillsPCPokemonList::
 ; (species, box number, list index) x30
-	ds 3 * 30
-	ds 720
+	ds 4 * 30
+	ds 690
 wBillsPC_ScrollPosition:: db
 wBillsPC_CursorPosition:: db
 wBillsPC_NumMonsInBox:: db
@@ -1503,7 +1513,7 @@ wCurSpecies:: db
 
 wNamedObjectType:: db
 
-	ds 1
+wItemFlags:: db
 
 wJumptableIndex::
 wBattleTowerBattleEnded::
@@ -1524,12 +1534,6 @@ NEXTU
 wCreditsBorderFrame:: db
 wCreditsBorderMon:: db
 wCreditsLYOverride:: db
-
-NEXTU
-; pokedex
-wPrevDexEntryJumptableIndex:: db
-wPrevDexEntryBackup:: db
-wUnusedPokedexByte:: db
 
 NEXTU
 ; pokegear
@@ -2158,7 +2162,7 @@ NEXTU
 ; hidden item data
 wHiddenItemData::
 wHiddenItemEvent:: dw
-wHiddenItemID:: db
+wHiddenItemID:: dw
 wHiddenItemDataEnd::
 
 NEXTU
@@ -2674,7 +2678,7 @@ wMoveSelectionMenuType:: db
 
 ; corresponds to the data/pokemon/base_stats/*.asm contents
 wCurBaseData::
-wBaseDexNo:: db
+wBaseSpecies:: db
 wBaseStats::
 wBaseHP:: db
 wBaseAttack:: db
@@ -2688,8 +2692,8 @@ wBaseType2:: db
 wBaseCatchRate:: db
 wBaseExp:: db
 wBaseItems::
-wBaseItem1:: db
-wBaseItem2:: db
+wBaseItem1:: dw
+wBaseItem2:: dw
 wBaseGender:: db
 wBaseUnknown1:: db
 wBaseEggSteps:: db
@@ -2704,8 +2708,6 @@ wCurBaseDataEnd::
 	assert wCurBaseDataEnd - wCurBaseData == BASE_DATA_SIZE
 
 wCurDamage:: dw
-
-	ds 2
 
 wMornEncounterRate::  db
 wDayEncounterRate::   db
@@ -2943,7 +2945,7 @@ endr
 
 wCmdQueue:: ds CMDQUEUE_CAPACITY * CMDQUEUE_ENTRY_SIZE
 
-	ds 40
+	ds 4
 
 wMapObjects::
 wPlayerObject:: map_object wPlayer ; player is map object 0
@@ -2957,14 +2959,11 @@ wObjectMasks:: ds NUM_OBJECTS
 wVariableSprites:: ds $100 - SPRITE_VARS
 
 wEnteredMapFromContinue:: db
-	ds 2
+
 wTimeOfDayPal:: db
-	ds 4
 wTimeOfDayPalFlags:: db
 wTimeOfDayPalset:: db
 wCurTimeOfDay:: db
-
-	ds 1
 
 wSecretID:: dw
 wStatusFlags::
@@ -3008,7 +3007,7 @@ wKantoBadges:: flag_array NUM_KANTO_BADGES
 wTMsHMs:: ds NUM_TMS + NUM_HMS
 
 wNumItems:: db
-wItems:: ds MAX_ITEMS * 2 + 1
+wItems:: ds MAX_ITEMS * 3 + 1
 
 wNumKeyItems:: db
 wKeyItems:: ds MAX_KEY_ITEMS + 1
@@ -3017,7 +3016,7 @@ wNumBalls:: db
 wBalls:: ds MAX_BALLS * 2 + 1
 
 wNumPCItems:: db
-wPCItems:: ds MAX_PC_ITEMS * 2 + 1
+wPCItems:: ds MAX_PC_ITEMS * 3 + 1
 
 wPokegearFlags::
 ; bit 0: map
@@ -3028,21 +3027,19 @@ wPokegearFlags::
 	db
 wRadioTuningKnob:: db
 wLastDexMode:: db
-	ds 1
+
 wWhichRegisteredItem:: db
 wRegisteredItem:: db
 
 wPlayerState:: db
 
 wHallOfFameCount:: db
-	ds 1
+
 wTradeFlags:: flag_array NUM_NPC_TRADES
-	ds 1
+
 wMooMooBerries:: db
 wUndergroundSwitchPositions:: db
 wFarfetchdPosition:: db
-
-	ds 13
 
 ; map scene ids
 wPokecenter2FSceneID::                            db
@@ -3438,6 +3435,13 @@ wPokeAnimBitmaskBuffer:: ds 7
 wPokeAnimStructEnd::
 
 
+SECTION "16-bit WRAM tables", WRAMX
+; align this section to $100
+	wram_conversion_table wPokemonIndexTable, MON_TABLE
+	wram_conversion_table wMoveIndexTable, MOVE_TABLE
+	wram_conversion_table wItemIndexTable, ITEM_TABLE
+
+
 SECTION "Battle Tower RAM", WRAMX
 
 w3_d000:: ds 1
@@ -3621,8 +3625,9 @@ wSurfWaveBGEffectEnd::
 ENDU
 
 
-SECTION "Mobile RAM", WRAMX
+SECTION "Mobile RAM and Pokedex Listings", WRAMX
 
+UNION
 w5_d800:: ds $200
 w5_da00:: ds $200
 w5_dc00:: ds $d
@@ -3633,6 +3638,10 @@ w5_MobileOpponentBattleStartMessage:: ds $c
 w5_MobileOpponentBattleWinMessage:: ds $c
 w5_MobileOpponentBattleLossMessage:: ds $c
 
+NEXTU
+wPokedexOrder:: ds 2 * (NUM_POKEMON + 1) ; enough room to expand to 1,407 entries
+
+ENDU
 
 SECTION "Scratch RAM", WRAMX
 

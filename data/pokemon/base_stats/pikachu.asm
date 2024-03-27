@@ -1,4 +1,4 @@
-	db PIKACHU ; 025
+	db 0 ; species ID placeholder
 
 	db  35,  55,  30,  90,  50,  40
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db ELECTRIC, ELECTRIC ; type
 	db 190 ; catch rate
 	db 82 ; base exp
-	db NO_ITEM, BERRY ; items
+	dw NO_ITEM, BERRY ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 10 ; step cycles to hatch

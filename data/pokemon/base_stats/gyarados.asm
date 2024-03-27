@@ -1,4 +1,4 @@
-	db GYARADOS ; 130
+	db 0 ; species ID placeholder
 
 	db  95, 125,  79,  81,  60, 100
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db WATER, FLYING ; type
 	db 45 ; catch rate
 	db 214 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 5 ; step cycles to hatch

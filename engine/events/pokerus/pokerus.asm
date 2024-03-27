@@ -130,18 +130,24 @@ ConvertBerriesToBerryJuice:
 	call Random
 	cp 1 out_of 16 ; 6.25% chance
 	ret nc
+	ld hl, SHUCKLE
+	call GetPokemonIDFromIndex
+	ld [wTempSpecies], a
 	ld hl, wPartyMons
 	ld a, [wPartyCount]
 .partyMonLoop
 	push af
 	push hl
-	ld a, [hl]
-	cp SHUCKLE
+	ld a, [wTempSpecies]
+	cp [hl]
 	jr nz, .loopMon
 	ld bc, MON_ITEM
 	add hl, bc
 	ld a, [hl]
-	cp BERRY
+	push hl
+	call GetItemIndexFromID
+	cphl16 BERRY
+	pop hl
 	jr z, .convertToJuice
 
 .loopMon
@@ -151,11 +157,17 @@ ConvertBerriesToBerryJuice:
 	pop af
 	dec a
 	jr nz, .partyMonLoop
+.done
+	xor a
+	ld [wTempSpecies], a
 	ret
 
 .convertToJuice
-	ld a, BERRY_JUICE
+	push hl
+	ld hl, BERRY_JUICE
+	call GetItemIDFromIndex
+	pop hl
 	ld [hl], a
 	pop hl
 	pop af
-	ret
+	jr .done

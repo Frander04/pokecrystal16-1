@@ -1,4 +1,4 @@
-	db TYROGUE ; 236
+	db 0 ; species ID placeholder
 
 	db  35,  35,  35,  35,  35,  35
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db FIGHTING, FIGHTING ; type
 	db 75 ; catch rate
 	db 91 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F0 ; gender ratio
 	db 100 ; unknown 1
 	db 25 ; step cycles to hatch

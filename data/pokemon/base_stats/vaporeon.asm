@@ -1,4 +1,4 @@
-	db VAPOREON ; 134
+	db 0 ; species ID placeholder
 
 	db 130,  65,  60,  65, 110,  95
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db WATER, WATER ; type
 	db 45 ; catch rate
 	db 196 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F12_5 ; gender ratio
 	db 100 ; unknown 1
 	db 35 ; step cycles to hatch

@@ -1,4 +1,4 @@
-	db CLEFFA ; 173
+	db 0 ; species ID placeholder
 
 	db  50,  25,  28,  15,  45,  55
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db NORMAL, NORMAL ; type
 	db 150 ; catch rate
 	db 37 ; base exp
-	db MYSTERYBERRY, MOON_STONE ; items
+	dw MYSTERYBERRY, MOON_STONE ; items
 	db GENDER_F75 ; gender ratio
 	db 100 ; unknown 1
 	db 10 ; step cycles to hatch

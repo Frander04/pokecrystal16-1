@@ -1,4 +1,4 @@
-	db ESPEON ; 196
+	db 0 ; species ID placeholder
 
 	db  65,  65,  60, 110, 130,  95
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db PSYCHIC_TYPE, PSYCHIC_TYPE ; type
 	db 45 ; catch rate
 	db 197 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F12_5 ; gender ratio
 	db 100 ; unknown 1
 	db 35 ; step cycles to hatch

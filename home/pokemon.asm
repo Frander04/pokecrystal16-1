@@ -4,7 +4,7 @@ IsAPokemon::
 	jr z, .NotAPokemon
 	cp EGG
 	jr z, .Pokemon
-	cp NUM_POKEMON + 1
+	cp MON_TABLE_ENTRIES + 1
 	jr c, .Pokemon
 
 .NotAPokemon:
@@ -155,8 +155,6 @@ _PlayMonCry::
 	ret
 
 LoadCry::
-; Load cry bc.
-
 	call GetCryIndex
 	ret c
 
@@ -192,12 +190,15 @@ endr
 GetCryIndex::
 	and a
 	jr z, .no
-	cp NUM_POKEMON + 1
+	cp MON_TABLE_ENTRIES + 1
 	jr nc, .no
 
-	dec a
-	ld c, a
-	ld b, 0
+	push hl
+	call GetPokemonIndexFromID
+	dec hl
+	ld b, h
+	ld c, l
+	pop hl
 	and a
 	ret
 
@@ -240,8 +241,6 @@ GetBaseData::
 	push hl
 	ldh a, [hROMBank]
 	push af
-	ld a, BANK(BaseData)
-	rst Bankswitch
 
 ; Egg doesn't have BaseData
 	ld a, [wCurSpecies]
@@ -249,10 +248,14 @@ GetBaseData::
 	jr z, .egg
 
 ; Get BaseData
-	dec a
-	ld bc, BASE_DATA_SIZE
+	call GetPokemonIndexFromID
+	ld b, h
+	ld c, l
+	ld a, BANK(BaseData)
 	ld hl, BaseData
-	call AddNTimes
+	call LoadIndirectPointer
+	; jr z, <some error handler>
+	rst Bankswitch
 	ld de, wCurBaseData
 	ld bc, BASE_DATA_SIZE
 	call CopyBytes
@@ -281,7 +284,7 @@ GetBaseData::
 .end
 ; Replace Pokedex # with species
 	ld a, [wCurSpecies]
-	ld [wBaseDexNo], a
+	ld [wBaseSpecies], a
 
 	pop af
 	rst Bankswitch

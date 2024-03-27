@@ -1,4 +1,4 @@
-	db EXEGGUTOR ; 103
+	db 0 ; species ID placeholder
 
 	db  95,  95,  85,  55, 125,  65
 	;   hp  atk  def  spd  sat  sdf
@@ -6,7 +6,7 @@
 	db GRASS, PSYCHIC_TYPE ; type
 	db 45 ; catch rate
 	db 212 ; base exp
-	db NO_ITEM, NO_ITEM ; items
+	dw NO_ITEM, NO_ITEM ; items
 	db GENDER_F50 ; gender ratio
 	db 100 ; unknown 1
 	db 20 ; step cycles to hatch
