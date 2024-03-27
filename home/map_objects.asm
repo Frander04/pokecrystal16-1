@@ -9,10 +9,7 @@ GetSpritePalette::
 	farcall _GetSpritePalette
 
 	ld a, c
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 GetSpriteVTile::
 	push hl
@@ -280,6 +277,15 @@ CheckObjectTime::
 	ret c
 	ld a, [hl]
 	cp d
+	jr nc, .yes
+	jr .no
+
+.yes
+	and a
+	ret
+
+.no
+	scf
 	ret
 
 UnmaskCopyMapObjectStruct::
@@ -517,16 +523,6 @@ _GetMovementIndex::
 	rst Bankswitch
 
 	ld a, h
-	ret
-
-SetVramState_Bit0:: ; unreferenced
-	ld hl, wVramState
-	set 0, [hl]
-	ret
-
-ResetVramState_Bit0:: ; unreferenced
-	ld hl, wVramState
-	res 0, [hl]
 	ret
 
 UpdateSprites::

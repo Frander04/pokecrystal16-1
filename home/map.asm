@@ -612,19 +612,7 @@ ClearObjectStructs::
 	ld hl, wObject1Struct
 	ld bc, OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 1)
 	xor a
-	call ByteFill
-
-; Just to make sure (this is rather pointless)
-	ld hl, wObject1Struct
-	ld de, OBJECT_LENGTH
-	ld c, NUM_OBJECT_STRUCTS - 1
-	xor a
-.loop
-	ld [hl], a
-	add hl, de
-	dec c
-	jr nz, .loop
-	ret
+	jp ByteFill
 
 GetWarpDestCoords::
 	call GetMapScriptsBank
@@ -1076,15 +1064,9 @@ ObjectEventText::
 	text_far _ObjectEventText
 	text_end
 
-BGEvent:: ; unreferenced
-	jumptext BGEventText
-
 BGEventText::
 	text_far _BGEventText
 	text_end
-
-CoordinatesEvent:: ; unreferenced
-	jumptext CoordinatesEventText
 
 CoordinatesEventText::
 	text_far _CoordinatesEventText
@@ -2020,11 +2002,6 @@ SwitchToAnyMapAttributesBank::
 	rst Bankswitch
 	ret
 
-GetMapAttributesBank:: ; unreferenced
-	ld a, [wMapGroup]
-	ld b, a
-	ld a, [wMapNumber]
-	ld c, a
 GetAnyMapAttributesBank::
 	push hl
 	push de
@@ -2085,10 +2062,7 @@ GetAnyMapBlocksBank::
 	call GetFarByte
 	rst Bankswitch
 
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 GetMapAttributesPointer::
 ; returns the current map's data pointer in hl.
@@ -2109,10 +2083,7 @@ GetMapEnvironment::
 	ld de, MAP_ENVIRONMENT
 	call GetMapField
 	ld a, c
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 GetAnyMapEnvironment::
 	push hl
@@ -2121,10 +2092,7 @@ GetAnyMapEnvironment::
 	ld de, MAP_ENVIRONMENT
 	call GetAnyMapField
 	ld a, c
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 GetAnyMapTileset::
 	ld de, MAP_TILESET
@@ -2142,10 +2110,7 @@ GetWorldMapLocation::
 	call GetAnyMapField
 	ld a, c
 
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 GetMapMusic::
 	push hl

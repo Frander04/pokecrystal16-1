@@ -18,11 +18,7 @@ InitSound::
 	ldh [hROMBank], a
 	ld [MBC3RomBank], a
 
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 UpdateSound::
 	push hl
@@ -42,11 +38,7 @@ UpdateSound::
 	ldh [hROMBank], a
 	ld [MBC3RomBank], a
 
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 _LoadMusicByte::
 ; [wCurMusicByte] = [a:de]
@@ -89,11 +81,7 @@ PlayMusic::
 	pop af
 	ldh [hROMBank], a
 	ld [MBC3RomBank], a
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 PlayMusic2::
 ; Stop playing music, then play music de.
@@ -120,11 +108,7 @@ PlayMusic2::
 	ldh [hROMBank], a
 	ld [MBC3RomBank], a
 
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 PlayCry::
 ; Play cry de.
@@ -171,11 +155,7 @@ endr
 	ldh [hROMBank], a
 	ld [MBC3RomBank], a
 
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 PlaySFX::
 ; Play sound effect de.
@@ -211,11 +191,7 @@ PlaySFX::
 	ld [MBC3RomBank], a
 
 .done
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 WaitPlaySFX::
 	call WaitSFX
@@ -285,11 +261,6 @@ MinVolume::
 	ld [wVolume], a
 	ret
 
-FadeOutToMusic:: ; unreferenced
-	ld a, 4
-	ld [wMusicFade], a
-	ret
-
 FadeInToMusic::
 	ld a, 4 | (1 << MUSIC_FADE_IN_F)
 	ld [wMusicFade], a
@@ -325,11 +296,7 @@ FadeToMapMusic::
 	ld [wMapMusic], a
 
 .done
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 PlayMapMusic::
 	push hl
@@ -352,11 +319,7 @@ PlayMapMusic::
 	call PlayMusic
 
 .done
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 PlayMapMusicBike::
 ; If the player's on a bike, play the bike music instead of the map music
@@ -383,11 +346,7 @@ PlayMapMusicBike::
 	ld [wMapMusic], a
 	call PlayMusic
 
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 TryRestartMapMusic::
 	ld a, [wDontPlayMapMusicOnReload]
@@ -414,11 +373,7 @@ RestartMapMusic::
 	ld e, a
 	ld d, 0
 	call PlayMusic
-	pop af
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopAFBCDEHL
 
 SpecialMapMusic::
 	ld a, [wPlayerState]
@@ -433,11 +388,6 @@ SpecialMapMusic::
 
 .no
 	and a
-	ret
-
-.bike ; unreferenced
-	ld de, MUSIC_BICYCLE
-	scf
 	ret
 
 .surf

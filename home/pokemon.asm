@@ -70,10 +70,7 @@ DrawBattleHPBar::
 	ld [hl], a
 
 .done
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 PrepMonFrontpic::
 	ld a, $1
@@ -109,8 +106,7 @@ PlayStereoCry::
 	ld [wStereoPanningMask], a
 	pop af
 	call _PlayMonCry
-	call WaitSFX
-	ret
+	jp WaitSFX
 
 PlayStereoCry2::
 ; Don't wait for the cry to end.
@@ -123,8 +119,7 @@ PlayStereoCry2::
 
 PlayMonCry::
 	call PlayMonCry2
-	call WaitSFX
-	ret
+	jp WaitSFX
 
 PlayMonCry2::
 ; Don't wait for the cry to end.
@@ -133,8 +128,6 @@ PlayMonCry2::
 	ld [wStereoPanningMask], a
 	ld [wCryTracks], a
 	pop af
-	call _PlayMonCry
-	ret
 
 _PlayMonCry::
 	push hl
@@ -149,10 +142,7 @@ _PlayMonCry::
 	call PlayCry
 
 .done
-	pop bc
-	pop de
-	pop hl
-	ret
+	jp PopBCDEHL
 
 LoadCry::
 	call GetCryIndex
@@ -210,6 +200,7 @@ PrintLevel::
 ; Print wTempMonLevel at hl
 
 	ld a, [wTempMonLevel]
+_PrintLevel::
 	ld [hl], "<LV>"
 	inc hl
 
@@ -236,9 +227,9 @@ Print8BitNumLeftAlign::
 	jp PrintNum
 
 GetBaseData::
-	push bc
-	push de
 	push hl
+	push de
+	push bc
 	ldh a, [hROMBank]
 	push af
 
@@ -279,7 +270,6 @@ GetBaseData::
 	ld [hl], e
 	inc hl
 	ld [hl], d
-	jr .end ; useless
 
 .end
 ; Replace Pokedex # with species
@@ -288,10 +278,7 @@ GetBaseData::
 
 	pop af
 	rst Bankswitch
-	pop hl
-	pop de
-	pop bc
-	ret
+	jp PopBCDEHL
 
 GetCurNickname::
 	ld a, [wCurPartyMon]
